@@ -47,10 +47,19 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
   ## Get years
   years <- unique(format(dates,"%Y"))
   
-  type <- match.arg(type, c("ppt", "tmean", "tmin", "tmax"))
+  type <- match.arg(type, c("ppt", "tmean", "tmin", "tmax", "vpdmin", "vpdmax", "tdmean", "all"))
   
   uri_dates <- gsub(pattern = "-",replacement = "",dates)
-  uris <- sapply(uri_dates,function(x){paste("http://services.nacse.org/prism/data/public/4km",type,x,sep="/")})
+  
+  if(type == "all"){
+    uris <- unlist(lapply(uri_dates,
+                          function(x){paste("http://services.nacse.org/prism/data/public/4km", 
+                                            c("ppt", "tmean", "tmin", "tmax", "vpdmin", "vpdmax", "tdmean"), 
+                                            x, sep="/")}))
+  } else {
+    uris <- sapply(uri_dates,
+                   function(x){paste("http://services.nacse.org/prism/data/public/4km", type, x, sep="/")})
+  }
   
   if(check == "internal"){
     x <- httr::HEAD(uris[1])
