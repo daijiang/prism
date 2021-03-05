@@ -93,7 +93,6 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
                    function(x){paste("http://services.nacse.org/prism/data/public/4km", type, x, sep="/")})
   }
 
-  
   if(check == "internal"){
     x <- httr::HEAD(uris[1])
     fn <- x$headers$`content-disposition`
